@@ -42,10 +42,11 @@ class Clock extends React.Component<IClockProps, IClockState> {
         for (let i = 0; i < 12; i++) {
             const angle = 360 * i / 12;
             const x1 = this.x(xOrigin, radius - 10, angle);
-            const y1 = this.y(yOrigin, radius - 10, angle)
-            const x2 = this.x(xOrigin, radius, angle);
-            const y2 = this.y(yOrigin, radius, angle);
-            markings.push(<line className="hourMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
+            const y1 = this.y(yOrigin, radius - 10, angle);
+            // const x2 = this.x(xOrigin, radius, angle);
+            // const y2 = this.y(yOrigin, radius, angle);
+            // markings.push(<line className="hourMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
+            markings.push(<text x={x1 -5} y={y1 + 5} >{i === 0 ? 12 : i}</text>);
         }
 
         for (let i = 0; i < 60; i++) {

@@ -6,6 +6,9 @@ svg {
     fill: black;
     stroke: black;
     stroke-width: 2;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: normal;
 }
 
 .clockFace {
