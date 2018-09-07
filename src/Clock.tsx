@@ -23,14 +23,14 @@ class Clock extends React.Component<IClockProps, IClockState> {
 
         return (
             <div className="clock">
-                <div className="location">{this.props.location}</div>
+                <h2 className="location">{this.props.location}</h2>
                 <svg width="200" height="200" viewBox="0 0 100 100">
-                    <circle cx={xOrigin} cy={yOrigin} r={radius} fill="white" />
+                    <circle className="clockFace" cx={xOrigin} cy={yOrigin} r={radius} />
 
                     {this.renderMarkings(xOrigin, yOrigin, radius)}
                     {this.renderHands(xOrigin, yOrigin, radius)}
 
-                    <circle cx={xOrigin} cy={yOrigin} r="1.5" fill="black" />
+                    <circle cx={xOrigin} cy={yOrigin} r="1.5" />
                 </svg>
             </div>
         );
@@ -38,7 +38,7 @@ class Clock extends React.Component<IClockProps, IClockState> {
 
     private renderMarkings(xOrigin: number, yOrigin: number, radius: number): JSX.Element {
         const markings = [];
-        
+
         for (let i = 0; i < 12; i++) {
             const angle = 360 * i / 12;
             const x1 = this.x(xOrigin, radius - 10, angle);
@@ -57,7 +57,7 @@ class Clock extends React.Component<IClockProps, IClockState> {
             markings.push(<line className="minuteMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
         }
 
-        return(
+        return (
             <svg>
                 {markings}
             </svg>
@@ -98,7 +98,7 @@ class Clock extends React.Component<IClockProps, IClockState> {
     }
 
     private getHours() {
-        return this.state.time.getHours() + (this.props.offset === undefined ? 0 : this.props.offset);
+        return this.state.time.getHours() + (this.props.offset || 0);
     }
 
     private tick(): void {

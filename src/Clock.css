@@ -3,8 +3,13 @@
 }
 
 svg {
+    fill: black;
     stroke: black;
     stroke-width: 2;
+}
+
+.clockFace {
+    fill: white;
 }
 
 .secondsHand {
