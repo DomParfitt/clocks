@@ -1,0 +1,21 @@
+.clock {
+    display: inline-block;
+}
+
+svg {
+    stroke: black;
+    stroke-width: 2;
+}
+
+.secondsHand {
+    stroke: red;
+    stroke-width: 1;
+}
+
+.hoursHand {
+    stroke-width: 3;
+}
+
+.location {
+    text-align: center;
+}
