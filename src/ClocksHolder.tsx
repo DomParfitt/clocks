@@ -5,7 +5,7 @@ class ClocksHolder extends React.Component<IClocksHolderProps, IClocksHolderStat
 
     constructor(props: IClocksHolderProps) {
         super(props);
-        this.state = {clocks: this.props.clocks === undefined ? [] : this.props.clocks};
+        this.state = {clocks: this.props.clocks || []};
     }
 
     public render() {

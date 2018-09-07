@@ -19,3 +19,7 @@ svg {
 .location {
     text-align: center;
 }
+
+.minuteMark {
+    stroke-width: 1;
+}

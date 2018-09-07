@@ -16,39 +16,72 @@ class Clock extends React.Component<IClockProps, IClockState> {
         setInterval(() => this.tick(), tickSpeed);
     }
 
-    public render() {
+    public render(): JSX.Element {
         const radius = 40;
         const xOrigin = 50;
         const yOrigin = 50;
-        const millisAngle = this.getMilliseconds() / 1000;
-        const secondsAngle = (this.getSeconds() / 60) +  (millisAngle / 60);
-        const minutesAngle = (this.getMinutes() / 60) + (secondsAngle / 60);
-        const hoursAngle = (this.getHours() / 12) + (minutesAngle / 12);
-        const xSeconds = this.x(xOrigin, radius-5, Math.floor(360 * secondsAngle));
-        const ySeconds = this.y(yOrigin, radius-5, 360 * secondsAngle);
-        const xMinutes = this.x(xOrigin, radius-5, 360 * minutesAngle);
-        const yMinutes = this.y(yOrigin, radius-5, 360 * minutesAngle);
-        const xHours = this.x(xOrigin, radius-15, 360 * hoursAngle);
-        const yHours = this.y(yOrigin, radius-15, 360 * hoursAngle);
 
         return (
             <div className="clock">
                 <div className="location">{this.props.location}</div>
                 <svg width="200" height="200" viewBox="0 0 100 100">
                     <circle cx={xOrigin} cy={yOrigin} r={radius} fill="white" />
-                    
-                    <line x1={xOrigin} y1={yOrigin - radius} x2={xOrigin} y2={yOrigin - radius + 10}  />
-                    <line x1={xOrigin} y1={yOrigin + radius} x2={xOrigin} y2={yOrigin + radius - 10}  />
-                    <line x1={xOrigin + radius}y1={yOrigin} x2={xOrigin + radius - 10} y2={yOrigin}  />
-                    <line x1={xOrigin - radius} y1={yOrigin} x2={xOrigin - radius + 10} y2={yOrigin}  />
-                    
-                    <line className="secondsHand" x1={xOrigin} y1={yOrigin} x2={xSeconds} y2={ySeconds} />
-                    <line className="minutesHand" x1={xOrigin} y1={yOrigin} x2={xMinutes} y2={yMinutes}  />
-                    <line className="hoursHand" x1={xOrigin} y1={yOrigin} x2={xHours} y2={yHours}  />
-                    
-                    <circle cx={xOrigin} cy={yOrigin} r="1.5"  fill="black" />
+
+                    {this.renderMarkings(xOrigin, yOrigin, radius)}
+                    {this.renderHands(xOrigin, yOrigin, radius)}
+
+                    <circle cx={xOrigin} cy={yOrigin} r="1.5" fill="black" />
                 </svg>
             </div>
+        );
+    }
+
+    private renderMarkings(xOrigin: number, yOrigin: number, radius: number): JSX.Element {
+        const markings = [];
+        
+        for (let i = 0; i < 12; i++) {
+            const angle = 360 * i / 12;
+            const x1 = this.x(xOrigin, radius - 10, angle);
+            const y1 = this.y(yOrigin, radius - 10, angle)
+            const x2 = this.x(xOrigin, radius, angle);
+            const y2 = this.y(yOrigin, radius, angle);
+            markings.push(<line className="hourMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
+        }
+
+        for (let i = 0; i < 60; i++) {
+            const angle = 360 * i / 60;
+            const x1 = this.x(xOrigin, radius - 5, angle);
+            const y1 = this.y(yOrigin, radius - 5, angle)
+            const x2 = this.x(xOrigin, radius, angle);
+            const y2 = this.y(yOrigin, radius, angle);
+            markings.push(<line className="minuteMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
+        }
+
+        return(
+            <svg>
+                {markings}
+            </svg>
+        );
+    }
+
+    private renderHands(xOrigin: number, yOrigin: number, radius: number): JSX.Element {
+        const millisAngle = this.getMilliseconds() / 1000;
+        const secondsAngle = (this.getSeconds() / 60) + (millisAngle / 60);
+        const minutesAngle = (this.getMinutes() / 60) + (secondsAngle / 60);
+        const hoursAngle = (this.getHours() / 12) + (minutesAngle / 12);
+        const xSeconds = this.x(xOrigin, radius - 5, Math.floor(360 * secondsAngle));
+        const ySeconds = this.y(yOrigin, radius - 5, 360 * secondsAngle);
+        const xMinutes = this.x(xOrigin, radius - 5, 360 * minutesAngle);
+        const yMinutes = this.y(yOrigin, radius - 5, 360 * minutesAngle);
+        const xHours = this.x(xOrigin, radius - 15, 360 * hoursAngle);
+        const yHours = this.y(yOrigin, radius - 15, 360 * hoursAngle);
+
+        return (
+            <svg>
+                <line className="hoursHand" x1={xOrigin} y1={yOrigin} x2={xHours} y2={yHours} />
+                <line className="minutesHand" x1={xOrigin} y1={yOrigin} x2={xMinutes} y2={yMinutes} />
+                <line className="secondsHand" x1={xOrigin} y1={yOrigin} x2={xSeconds} y2={ySeconds} />
+            </svg>
         );
     }
 
@@ -85,6 +118,8 @@ export interface IClockProps extends React.ClassAttributes<Clock> {
     location?: string;
     isSmooth?: boolean;
     offset?: number;
+    hasHourMarks?: boolean;
+    hasMinuteMarks?: boolean;
 }
 
 export interface IClockState extends React.ComponentState {
