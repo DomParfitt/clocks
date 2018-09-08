@@ -11,6 +11,10 @@ svg {
     font-weight: normal;
 }
 
+text {
+    stroke-width: 0.1;
+}
+
 .clockFace {
     fill: white;
 }
