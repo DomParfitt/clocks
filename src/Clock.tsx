@@ -3,17 +3,23 @@ import './Clock.css';
 
 class Clock extends React.Component<IClockProps, IClockState> {
 
+    private timer: NodeJS.Timer;
+
     constructor(props: IClockProps) {
         super(props);
-        this.state = { time: new Date() };
+        this.state = { time: this.props.time || new Date() };
     }
 
     public componentWillMount() {
         let tickSpeed = 1000;
         if (this.props.isSmooth) {
-            tickSpeed = 100;
+            tickSpeed = 50;
         }
-        setInterval(() => this.tick(), tickSpeed);
+        this.timer = setInterval(() => this.tick(), tickSpeed);
+    }
+
+    public componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     public render(): JSX.Element {
@@ -43,10 +49,10 @@ class Clock extends React.Component<IClockProps, IClockState> {
             const angle = 360 * i / 12;
             const x1 = this.x(xOrigin, radius - 10, angle);
             const y1 = this.y(yOrigin, radius - 10, angle);
-            // const x2 = this.x(xOrigin, radius, angle);
-            // const y2 = this.y(yOrigin, radius, angle);
-            // markings.push(<line className="hourMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
-            markings.push(<text x={x1 -5} y={y1 + 5} >{i === 0 ? 12 : i}</text>);
+            const x2 = this.x(xOrigin, radius, angle);
+            const y2 = this.y(yOrigin, radius, angle);
+            markings.push(<line className="hourMark" x1={x1} y1={y1} x2={x2} y2={y2} />);
+            // markings.push(<text x={x1} y={y1} dx={-5} dy={5}>{i === 0 ? 12 : i}</text>);
         }
 
         for (let i = 0; i < 60; i++) {
@@ -71,7 +77,7 @@ class Clock extends React.Component<IClockProps, IClockState> {
         const minutesAngle = (this.getMinutes() / 60) + (secondsAngle / 60);
         const hoursAngle = (this.getHours() / 12) + (minutesAngle / 12);
         const xSeconds = this.x(xOrigin, radius - 5, Math.floor(360 * secondsAngle));
-        const ySeconds = this.y(yOrigin, radius - 5, 360 * secondsAngle);
+        const ySeconds = this.y(yOrigin, radius - 5, Math.floor(360 * secondsAngle));
         const xMinutes = this.x(xOrigin, radius - 5, 360 * minutesAngle);
         const yMinutes = this.y(yOrigin, radius - 5, 360 * minutesAngle);
         const xHours = this.x(xOrigin, radius - 15, 360 * hoursAngle);
@@ -121,6 +127,7 @@ export interface IClockProps extends React.ClassAttributes<Clock> {
     offset?: number;
     hasHourMarks?: boolean;
     hasMinuteMarks?: boolean;
+    time?: Date;
 }
 
 export interface IClockState extends React.ComponentState {
