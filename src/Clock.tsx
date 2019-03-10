@@ -72,7 +72,10 @@ class Clock extends React.Component<IClockProps, IClockState> {
     }
 
     private renderHands(xOrigin: number, yOrigin: number, radius: number): JSX.Element {
-        const millisAngle = this.getMilliseconds() / 1000;
+        let millisAngle = this.getMilliseconds() / 1000;
+        if (!this.props.isSmooth) {
+            millisAngle = Math.round(millisAngle);
+        }
         const secondsAngle = (this.getSeconds() / 60) + (millisAngle / 60);
         const minutesAngle = (this.getMinutes() / 60) + (secondsAngle / 60);
         const hoursAngle = (this.getHours() / 12) + (minutesAngle / 12);
